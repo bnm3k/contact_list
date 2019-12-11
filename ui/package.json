@@ -1,0 +1,15 @@
+{
+    "name": "contact_list_ui",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "naga",
+    "license": "MIT",
+    "scripts": {
+        "dev": "parcel public/index.html",
+        "clean": "rm -rf .cache/ dist/"
+    },
+    "dependencies": {
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0"
+    }
+}
