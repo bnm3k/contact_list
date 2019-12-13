@@ -31,6 +31,15 @@ func (app *application) showContacts(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		app.clientError(w, http.StatusMethodNotAllowed)
 	}
+
+	contacts, err := app.contacts.GetAll()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	for _, contact := range contacts {
+		fmt.Fprintf(w, "%v\n", contact)
+	}
 	//w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("show contacts"))
 }
