@@ -5,8 +5,9 @@
     "author": "naga",
     "license": "MIT",
     "scripts": {
-        "dev": "parcel public/index.html",
-        "clean": "rm -rf .cache/ dist/"
+        "dev": "parcel src/index.html",
+        "build": "parcel build src/index.html  --out-dir public --public-url ./static/",
+        "clean": "rm -rf .cache/ dist/ public/"
     },
     "dependencies": {
         "react": "^16.12.0",
