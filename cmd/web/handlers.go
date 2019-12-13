@@ -3,52 +3,46 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		w.Header().Set("Allow", "GET")
-		http.NotFound(w, r)
+		app.notFound(w)
 		return
 	}
 	if r.Method != "GET" {
-		w.Header().Set("Allow", "GET")
-		http.Error(w, "Method Not Allowed", 405)
+		app.clientError(w, http.StatusMethodNotAllowed)
+		return
 	}
 	ts, err := template.ParseFiles("./ui/public/index.html")
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "Internal Server Error", 500)
+		app.serverError(w, err)
 		return
 	}
 	err = ts.Execute(w, nil)
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "Internal Server Error", 500)
+		app.serverError(w, err)
 	}
 }
 
-func showContacts(w http.ResponseWriter, r *http.Request) {
+func (app *application) showContacts(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		w.Header().Set("Allow", "GET")
-		http.Error(w, "Method Not Allowed", 405)
+		app.clientError(w, http.StatusMethodNotAllowed)
 	}
 	//w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("show contacts"))
 }
 
-func showSingleContact(w http.ResponseWriter, r *http.Request) {
+func (app *application) showSingleContact(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		w.Header().Set("Allow", "GET")
-		http.Error(w, "Method Not Allowed", 405)
+		app.clientError(w, http.StatusMethodNotAllowed)
 	}
 	idStr := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil || id < 1 {
-		http.NotFound(w, r)
+		app.notFound(w)
 		return
 	}
 	//use id
@@ -57,10 +51,9 @@ func showSingleContact(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("show contacts"))
 }
 
-func addContact(w http.ResponseWriter, r *http.Request) {
+func (app *application) addContact(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		w.Header().Set("Allow", "POST")
-		http.Error(w, "Method Not Allowed", 405)
+		app.clientError(w, http.StatusMethodNotAllowed)
 	}
 	w.Write([]byte("add contact"))
 }
